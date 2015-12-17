@@ -18,7 +18,7 @@ class colors:
 ###	bag_pos:	the position of the bag file
 def get_bag_info(bag_pos):
 	try:
-		if bag_pos.endswith((".bag", ".bag.active")):
+		if bag_pos.endswith((".bag")):
 			return yaml.load(subprocess.Popen(['rosbag', 'info', '--yaml', bag_pos], stdout=subprocess.PIPE).communicate()[0])
 	except:
 		return None
@@ -50,7 +50,7 @@ for e in bags_pos_list:
 bags_info_list = []
 for bag_pos in bags_pos_list:
 	bag_info = get_bag_info(bag_pos)
-	if 'start' in bag_info.keys(): bags_info_list.append(get_bag_info(bag_pos))
+	if bag_info and 'start' in bag_info.keys(): bags_info_list.append(get_bag_info(bag_pos))
 	else: print colors.ERROR + "%s doesn't contain start timestamp" % bag_pos + colors.END
 
 bags_info_list_s = sorted(bags_info_list, key=lambda bag_info: bag_info['start'])
